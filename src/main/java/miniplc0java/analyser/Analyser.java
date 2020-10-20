@@ -287,10 +287,15 @@ public final class Analyser {
 
     private void analyseExpression() throws CompileError {
         analyseItem();
-        while(nextIf(TokenType.Plus)!=null)
+        while(check(TokenType.Plus)||check(TokenType.Minus))
         {
-            analyseItem();
-            instructions.add(new Instruction(Operation.ADD));
+            if(nextIf(TokenType.Plus)!=null) {
+                analyseItem();
+                instructions.add(new Instruction(Operation.ADD));
+            }else if(nextIf(TokenType.Minus)!=null) {
+                analyseItem();
+                instructions.add(new Instruction(Operation.SUB));
+            }
         }
     }
 
@@ -319,10 +324,15 @@ public final class Analyser {
 
     private void analyseItem() throws CompileError {
         analyseFactor();
-        while(nextIf(TokenType.Mult)!=null)
+        while(check(TokenType.Mult)||check(TokenType.Div))
         {
-            analyseFactor();
-            instructions.add(new Instruction(Operation.MUL));
+            if(nextIf(TokenType.Mult)!=null) {
+                analyseFactor();
+                instructions.add(new Instruction(Operation.MUL));
+            }else if(nextIf(TokenType.Div)!=null) {
+                analyseFactor();
+                instructions.add(new Instruction(Operation.DIV));
+            }
         }
     }
 
